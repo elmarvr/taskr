@@ -1,10 +1,12 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
 import { useFonts } from "expo-font";
-
-import config from "./tamagui.config";
 import { Button, TamaguiProvider, Theme, styled } from "tamagui";
 import { SafeAreaProvider, SafeAreaView as RNSafeAreaView } from "react-native-safe-area-context";
+import { ConvexProvider, ConvexReactClient } from "convex/react";
+import "react-native-get-random-values";
+
+import config from "./tamagui.config";
+import { convex } from "./lib/convex";
+import { Todos } from "./components/todos";
 
 export const SafeAreaView = styled(RNSafeAreaView, {
   name: "SafeAreaView",
@@ -21,27 +23,16 @@ export default function App() {
   if (!loaded) return null;
 
   return (
-    <SafeAreaProvider>
-      <TamaguiProvider config={config}>
-        <Theme name="dark">
-          <SafeAreaView>
-            <Button>Click me</Button>
-          </SafeAreaView>
-        </Theme>
-      </TamaguiProvider>
-    </SafeAreaProvider>
+    <ConvexProvider client={convex}>
+      <SafeAreaProvider>
+        <TamaguiProvider config={config}>
+          <Theme name="dark">
+            <SafeAreaView>
+              <Todos />
+            </SafeAreaView>
+          </Theme>
+        </TamaguiProvider>
+      </SafeAreaProvider>
+    </ConvexProvider>
   );
 }
-
-{
-  /* <StatusBar style="auto" /> */
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
