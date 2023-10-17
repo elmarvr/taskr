@@ -3,15 +3,15 @@ import { XStack, YStack, Text, Spinner, Checkbox } from "tamagui";
 import { Check } from "@tamagui/lucide-icons";
 import { api } from "../convex/_generated/api";
 
-export const Todos = () => {
-  const todos = useQuery(api.todos.list);
+export const Tasks = () => {
+  const tasks = useQuery(api.tasks.list);
 
-  if (!todos) return <Spinner />;
+  if (!tasks) return <Spinner />;
 
   return (
     <YStack>
-      {todos.map((todo) => (
-        <XStack key={todo.id}>
+      {tasks.map((todo) => (
+        <XStack key={todo._id}>
           <Checkbox checked={todo.completed} mr="$2">
             <Checkbox.Indicator>
               <Check />
