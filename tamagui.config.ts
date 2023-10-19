@@ -1,4 +1,4 @@
-import { config as configPreset } from "@tamagui/config/v2";
+import { config as configPreset } from "@tamagui/config/v2-reanimated";
 import { createTamagui } from "tamagui";
 
 const config = createTamagui(configPreset);
