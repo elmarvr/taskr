@@ -5,7 +5,15 @@ const schema = defineSchema({
   tasks: defineTable({
     title: v.string(),
     completed: v.boolean(),
-  }),
+    userId: v.id("users"),
+  }).index("by_userId", ["userId"]),
+
+  users: defineTable({
+    name: v.string(),
+    image: v.string(),
+    email: v.string(),
+    tokenIdentifier: v.string(),
+  }).index("by_token", ["tokenIdentifier"]),
 });
 
 export default schema;

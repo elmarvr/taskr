@@ -1,12 +1,16 @@
 import { useFonts } from "expo-font";
-import { TamaguiProvider, Theme, styled } from "tamagui";
+import { Spinner, TamaguiProvider, Theme, YStack, styled } from "tamagui";
 import { SafeAreaProvider, SafeAreaView as RNSafeAreaView } from "react-native-safe-area-context";
-import { ConvexProvider } from "convex/react";
+import { AuthLoading, Authenticated, Unauthenticated } from "convex/react";
 import "react-native-get-random-values";
+import { ClerkProvider, useAuth } from "@clerk/clerk-expo";
+import { ConvexProviderWithClerk } from "convex/react-clerk";
 
 import config from "./tamagui.config";
 import { convex } from "./lib/convex";
 import { Tasks } from "./components/tasks";
+import { SignIn } from "./components/sign-in";
+import { tokenCache } from "./lib/cache";
 
 export const SafeAreaView = styled(RNSafeAreaView, {
   name: "SafeAreaView",
@@ -23,16 +27,28 @@ export default function App() {
   if (!loaded) return null;
 
   return (
-    <ConvexProvider client={convex}>
-      <SafeAreaProvider>
-        <TamaguiProvider config={config}>
-          <Theme name="dark">
-            <SafeAreaView>
-              <Tasks />
-            </SafeAreaView>
-          </Theme>
-        </TamaguiProvider>
-      </SafeAreaProvider>
-    </ConvexProvider>
+    <ClerkProvider publishableKey={process.env.CLERK_PUBLISHABLE_KEY!} tokenCache={tokenCache}>
+      <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
+        <SafeAreaProvider>
+          <TamaguiProvider config={config}>
+            <Theme name="dark">
+              <SafeAreaView>
+                <AuthLoading>
+                  <YStack flex={1} alignItems="center" justifyContent="center">
+                    <Spinner />
+                  </YStack>
+                </AuthLoading>
+                <Authenticated>
+                  <Tasks />
+                </Authenticated>
+                <Unauthenticated>
+                  <SignIn />
+                </Unauthenticated>
+              </SafeAreaView>
+            </Theme>
+          </TamaguiProvider>
+        </SafeAreaProvider>
+      </ConvexProviderWithClerk>
+    </ClerkProvider>
   );
 }

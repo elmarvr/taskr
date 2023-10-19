@@ -1,19 +1,28 @@
-import { useMutation, useQuery } from "convex/react";
-import { XStack, YStack, Text, Spinner, Checkbox, Stack, Form, Button, Dialog } from "tamagui";
+import { useQuery } from "convex/react";
+import { XStack, YStack, Text, Spinner, Checkbox, Form, Button } from "tamagui";
 import { Check, Pencil, Trash } from "@tamagui/lucide-icons";
+import { useAuth } from "@clerk/clerk-expo";
+
 import { api } from "../convex/_generated/api";
 import { CreateTaskForm } from "./create-task-form";
 import { Doc } from "../convex/_generated/dataModel";
 import { EditTaskSheet, EditTaskSheetProvider, useEditTaskSheet } from "./edit-task-sheet";
 import { useTaskRemoveOptimistic, useTaskUpdateOptimistic } from "../hooks/use-task-optimistic";
+import { useStoreUser } from "../hooks/use-store-user";
 
 export const Tasks = () => {
+  useStoreUser();
+
+  const { signOut } = useAuth();
+
   return (
     <EditTaskSheetProvider>
       <YStack flex={1} p="$4">
-        <TaskList />
+        <XStack w="100%" justifyContent="flex-end" pb="$6">
+          <Button onPress={() => signOut()}>Sign out</Button>
+        </XStack>
 
-        <Stack flex={1} />
+        <TaskList />
 
         <CreateTaskForm />
       </YStack>
@@ -26,17 +35,16 @@ export const Tasks = () => {
 const TaskList = () => {
   const tasks = useQuery(api.tasks.list);
 
-  if (!tasks)
+  if (!tasks) {
     return (
-      <YStack gap="$2">
-        {Array.from({ length: 4 }).map((_, i) => (
-          <XStack bg="$background" height="$2" borderRadius="$2" key={i} gap="$2"></XStack>
-        ))}
+      <YStack flex={1} justifyContent="center" alignItems="center">
+        <Spinner />
       </YStack>
     );
+  }
 
   return (
-    <YStack gap="$2">
+    <YStack flex={1} gap="$2">
       {tasks.map((task) => (
         <TaskItem key={task._id} task={task} />
       ))}
@@ -47,6 +55,7 @@ const TaskList = () => {
 const TaskItem = ({ task }: { task: Doc<"tasks"> }) => {
   const update = useTaskUpdateOptimistic();
   const remove = useTaskRemoveOptimistic();
+
   const { setActiveTask } = useEditTaskSheet("TaskItem");
 
   return (

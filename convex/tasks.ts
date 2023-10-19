@@ -1,21 +1,33 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
+import { withUser } from "./lib/user";
 
-export const list = query(async (ctx) => {
-  return ctx.db.query("tasks").collect();
-});
+export const list = query(
+  withUser({
+    handler: async (ctx) => {
+      return ctx.db
+        .query("tasks")
+        .withIndex("by_userId", (q) => q.eq("userId", ctx.user._id))
+        .collect();
+    },
+  })
+);
 
-export const create = mutation({
-  args: {
-    title: v.string(),
-  },
-  handler: async (ctx, { title }) => {
-    return ctx.db.insert("tasks", {
-      title,
-      completed: false,
-    });
-  },
-});
+export const create = mutation(
+  withUser({
+    args: {
+      title: v.string(),
+    },
+
+    handler: async (ctx, { title }) => {
+      return ctx.db.insert("tasks", {
+        userId: ctx.user._id,
+        title,
+        completed: false,
+      });
+    },
+  })
+);
 
 export const update = mutation({
   args: {
