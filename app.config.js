@@ -26,5 +26,8 @@ module.exports = {
     web: {
       favicon: "./assets/favicon.png",
     },
+    experiments: {
+      tsconfigPaths: true,
+    },
   },
 };

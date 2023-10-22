@@ -2,9 +2,9 @@ import { Button, Form, Input } from "tamagui";
 import { Controller } from "react-hook-form";
 import { Send } from "@tamagui/lucide-icons";
 
-import { useValidatedForm } from "../hooks/use-validated-form";
-import { createTaskSchema } from "../lib/validations/tasks";
-import { useTaskCreateOptimistic } from "../hooks/use-task-optimistic";
+import { useValidatedForm } from "~/hooks/use-validated-form";
+import { createTaskSchema } from "~/lib/validations/tasks";
+import { useTaskCreateOptimistic } from "~/hooks/use-task-optimistic";
 
 export const CreateTaskForm = () => {
   const form = useValidatedForm({

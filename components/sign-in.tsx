@@ -3,7 +3,7 @@ import * as WebBrowser from "expo-web-browser";
 import { useCallback } from "react";
 import { Button } from "tamagui";
 
-import { useWarmUpBrowser } from "../hooks/use-warmup-browser";
+import { useWarmUpBrowser } from "~/hooks/use-warmup-browser";
 
 WebBrowser.maybeCompleteAuthSession();
 

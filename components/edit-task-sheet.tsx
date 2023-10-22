@@ -3,10 +3,10 @@ import { Controller } from "react-hook-form";
 import { createContext } from "tamagui";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
-import { Doc } from "../convex/_generated/dataModel";
-import { useValidatedForm } from "../hooks/use-validated-form";
-import { editTaskSchema } from "../lib/validations/tasks";
-import { useTaskUpdateOptimistic } from "../hooks/use-task-optimistic";
+import { Doc } from "~/convex/_generated/dataModel";
+import { useValidatedForm } from "~/hooks/use-validated-form";
+import { editTaskSchema } from "~/lib/validations/tasks";
+import { useTaskUpdateOptimistic } from "~/hooks/use-task-optimistic";
 
 const [Provider, useEditTaskSheet] = createContext<{
   activeTask: Doc<"tasks"> | null;

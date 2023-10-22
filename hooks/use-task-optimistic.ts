@@ -1,15 +1,22 @@
 import { useMutation } from "convex/react";
-import { api } from "../convex/_generated/api";
-import { Id } from "../convex/_generated/dataModel";
+import { api } from "~/convex/_generated/api";
+import { Id } from "~/convex/_generated/dataModel";
 
 export function useTaskCreateOptimistic() {
   return useMutation(api.tasks.create).withOptimisticUpdate((store, task) => {
     const currentValue = store.getQuery(api.tasks.list);
+    const user = store.getQuery(api.users.me);
 
-    if (currentValue !== undefined) {
+    if (currentValue !== undefined && user !== undefined) {
       store.setQuery(api.tasks.list, {}, [
         ...currentValue,
-        { title: task.title, completed: false, _id: Date.toString() as Id<"tasks">, _creationTime: Date.now() },
+        {
+          title: task.title,
+          completed: false,
+          _id: Date.toString() as Id<"tasks">,
+          _creationTime: Date.now(),
+          userId: user?._id,
+        },
       ]);
     }
   });

@@ -3,17 +3,19 @@ import { XStack, YStack, Text, Spinner, Checkbox, Form, Button } from "tamagui";
 import { Check, Pencil, Trash } from "@tamagui/lucide-icons";
 import { useAuth } from "@clerk/clerk-expo";
 
-import { api } from "../convex/_generated/api";
+import { api } from "~/convex/_generated/api";
+import { Doc } from "~/convex/_generated/dataModel";
+import { useTaskRemoveOptimistic, useTaskUpdateOptimistic } from "~/hooks/use-task-optimistic";
+import { useStoreUser } from "~/hooks/use-store-user";
 import { CreateTaskForm } from "./create-task-form";
-import { Doc } from "../convex/_generated/dataModel";
 import { EditTaskSheet, EditTaskSheetProvider, useEditTaskSheet } from "./edit-task-sheet";
-import { useTaskRemoveOptimistic, useTaskUpdateOptimistic } from "../hooks/use-task-optimistic";
-import { useStoreUser } from "../hooks/use-store-user";
 
 export const Tasks = () => {
-  useStoreUser();
+  const userId = useStoreUser();
 
   const { signOut } = useAuth();
+
+  if (!userId) return null;
 
   return (
     <EditTaskSheetProvider>
@@ -39,6 +41,14 @@ const TaskList = () => {
     return (
       <YStack flex={1} justifyContent="center" alignItems="center">
         <Spinner />
+      </YStack>
+    );
+  }
+
+  if (tasks.length === 0) {
+    return (
+      <YStack flex={1} justifyContent="center" alignItems="center">
+        <Text>Add tasks</Text>
       </YStack>
     );
   }
