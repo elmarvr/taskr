@@ -1,9 +1,8 @@
-import { Button, Fieldset, Form, Input, Label, Sheet, Stack } from "tamagui";
+import { Button, Fieldset, Form, Input, Label, Sheet, Stack, createContext } from "tamagui";
 import { Controller } from "react-hook-form";
-import { createContext } from "tamagui";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
-import { Doc } from "~/convex/_generated/dataModel";
+import { Doc } from "~generated/dataModel";
 import { useValidatedForm } from "~/hooks/use-validated-form";
 import { editTaskSchema } from "~/lib/validations/tasks";
 import { useTaskUpdateOptimistic } from "~/hooks/use-task-optimistic";

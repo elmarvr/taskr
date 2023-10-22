@@ -28,6 +28,8 @@ module.exports = {
     },
     experiments: {
       tsconfigPaths: true,
+      typedRoutes: true,
     },
+    plugins: ["expo-router"],
   },
 };

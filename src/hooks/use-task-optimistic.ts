@@ -1,6 +1,7 @@
 import { useMutation } from "convex/react";
-import { api } from "~/convex/_generated/api";
-import { Id } from "~/convex/_generated/dataModel";
+
+import { api } from "~generated/api";
+import { Id } from "~generated/dataModel";
 
 export function useTaskCreateOptimistic() {
   return useMutation(api.tasks.create).withOptimisticUpdate((store, task) => {

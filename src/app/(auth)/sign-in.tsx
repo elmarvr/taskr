@@ -7,7 +7,7 @@ import { useWarmUpBrowser } from "~/hooks/use-warmup-browser";
 
 WebBrowser.maybeCompleteAuthSession();
 
-export const SignIn = () => {
+export default function SignInScreen() {
   useWarmUpBrowser();
 
   const { startOAuthFlow } = useOAuth({ strategy: "oauth_google" });
@@ -16,13 +16,11 @@ export const SignIn = () => {
     try {
       const { createdSessionId, setActive } = await startOAuthFlow();
 
-      if (setActive) {
-        setActive({
-          session: createdSessionId,
-        });
+      if (!setActive) return;
 
-        return;
-      }
+      setActive({
+        session: createdSessionId,
+      });
     } catch (error) {
       if (isClerkAPIResponseError(error)) {
         console.error(error);
@@ -31,4 +29,4 @@ export const SignIn = () => {
   }, []);
 
   return <Button onPress={onPress}>Sign in with Google</Button>;
-};
+}

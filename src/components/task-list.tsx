@@ -1,40 +1,14 @@
-import { useQuery } from "convex/react";
-import { XStack, YStack, Text, Spinner, Checkbox, Form, Button } from "tamagui";
 import { Check, Pencil, Trash } from "@tamagui/lucide-icons";
-import { useAuth } from "@clerk/clerk-expo";
+import { useQuery } from "convex/react";
+import { YStack, Spinner, Form, XStack, Checkbox, Text, Button, View, Separator } from "tamagui";
+import { FlashList } from "@shopify/flash-list";
 
-import { api } from "~/convex/_generated/api";
-import { Doc } from "~/convex/_generated/dataModel";
-import { useTaskRemoveOptimistic, useTaskUpdateOptimistic } from "~/hooks/use-task-optimistic";
-import { useStoreUser } from "~/hooks/use-store-user";
-import { CreateTaskForm } from "./create-task-form";
-import { EditTaskSheet, EditTaskSheetProvider, useEditTaskSheet } from "./edit-task-sheet";
+import { api } from "~generated/api";
+import { Doc } from "~generated/dataModel";
+import { useTaskUpdateOptimistic, useTaskRemoveOptimistic } from "~/hooks/use-task-optimistic";
+import { useEditTaskSheet } from "./edit-task-sheet";
 
-export const Tasks = () => {
-  const userId = useStoreUser();
-
-  const { signOut } = useAuth();
-
-  if (!userId) return null;
-
-  return (
-    <EditTaskSheetProvider>
-      <YStack flex={1} p="$4">
-        <XStack w="100%" justifyContent="flex-end" pb="$6">
-          <Button onPress={() => signOut()}>Sign out</Button>
-        </XStack>
-
-        <TaskList />
-
-        <CreateTaskForm />
-      </YStack>
-
-      <EditTaskSheet />
-    </EditTaskSheetProvider>
-  );
-};
-
-const TaskList = () => {
+export const TaskList = () => {
   const tasks = useQuery(api.tasks.list);
 
   if (!tasks) {
@@ -54,11 +28,11 @@ const TaskList = () => {
   }
 
   return (
-    <YStack flex={1} gap="$2">
-      {tasks.map((task) => (
-        <TaskItem key={task._id} task={task} />
-      ))}
-    </YStack>
+    <FlashList
+      data={tasks}
+      ItemSeparatorComponent={() => <Separator marginVertical="$3" />}
+      renderItem={({ item }) => <TaskItem task={item} />}
+    />
   );
 };
 

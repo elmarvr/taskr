@@ -3,7 +3,19 @@
   "compilerOptions": {
     "strict": true,
     "paths": {
-      "~/*": ["./*"]
-    }
-  }
+      "~/*": [
+        "./src/*"
+      ],
+      "~generated/*": [
+        "./convex/_generated/*"
+      ]
+    },
+    "baseUrl": "."
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts"
+  ]
 }

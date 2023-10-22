@@ -1,16 +1,15 @@
 import { useFonts } from "expo-font";
-import { Spinner, TamaguiProvider, Theme, YStack, styled } from "tamagui";
+import { Spinner, Stack, TamaguiProvider, Theme, YStack, styled } from "tamagui";
 import { SafeAreaProvider, SafeAreaView as RNSafeAreaView } from "react-native-safe-area-context";
-import { AuthLoading, Authenticated, Unauthenticated } from "convex/react";
 import "react-native-get-random-values";
 import { ClerkProvider, useAuth } from "@clerk/clerk-expo";
 import { ConvexProviderWithClerk } from "convex/react-clerk";
+import { Slot } from "expo-router";
 
-import config from "./tamagui.config";
-import { convex } from "./src/lib/convex";
-import { Tasks } from "./src/components/tasks";
-import { SignIn } from "./src/components/sign-in";
-import { tokenCache } from "./src/lib/cache";
+import config from "tamagui.config";
+import { convex } from "~/lib/convex";
+import { tokenCache } from "~/lib/cache";
+import { AuthLoading, Authenticated } from "convex/react";
 
 export const SafeAreaView = styled(RNSafeAreaView, {
   name: "SafeAreaView",
@@ -18,7 +17,7 @@ export const SafeAreaView = styled(RNSafeAreaView, {
   backgroundColor: "$backgroundStrong",
 });
 
-export default function App() {
+export default function RootLayout() {
   const [isLoaded] = useFonts({
     Inter: require("@tamagui/font-inter/otf/Inter-Medium.otf"),
     InterBold: require("@tamagui/font-inter/otf/Inter-Bold.otf"),
@@ -34,16 +33,12 @@ export default function App() {
             <Theme name="dark">
               <SafeAreaView>
                 <AuthLoading>
-                  <YStack flex={1} alignItems="center" justifyContent="center">
+                  <Stack flex={1} justifyContent="center" alignItems="center">
                     <Spinner />
-                  </YStack>
+                  </Stack>
                 </AuthLoading>
-                <Authenticated>
-                  <Tasks />
-                </Authenticated>
-                <Unauthenticated>
-                  <SignIn />
-                </Unauthenticated>
+
+                <Slot />
               </SafeAreaView>
             </Theme>
           </TamaguiProvider>
