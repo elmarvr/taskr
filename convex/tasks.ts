@@ -17,12 +17,13 @@ export const create = mutation(
   withUser({
     args: {
       title: v.string(),
+      description: v.optional(v.string()),
     },
 
-    handler: async (ctx, { title }) => {
+    handler: async (ctx, args) => {
       return ctx.db.insert("tasks", {
+        ...args,
         userId: ctx.user._id,
-        title,
         completed: false,
       });
     },
@@ -31,20 +32,20 @@ export const create = mutation(
 
 export const update = mutation({
   args: {
-    _id: v.id("tasks"),
+    id: v.id("tasks"),
     title: v.optional(v.string()),
     completed: v.optional(v.boolean()),
   },
-  handler: async (ctx, { _id, ...input }) => {
-    return ctx.db.patch(_id, input);
+  handler: async (ctx, { id, ...input }) => {
+    return ctx.db.patch(id, input);
   },
 });
 
 export const remove = mutation({
   args: {
-    _id: v.id("tasks"),
+    id: v.id("tasks"),
   },
-  handler: async (ctx, { _id }) => {
-    return ctx.db.delete(_id);
+  handler: async (ctx, { id }) => {
+    return ctx.db.delete(id);
   },
 });

@@ -1,12 +1,13 @@
 import { Check, Pencil, Trash } from "@tamagui/lucide-icons";
 import { useQuery } from "convex/react";
-import { YStack, Spinner, Form, XStack, Checkbox, Text, Button, View, Separator } from "tamagui";
+import { YStack, Spinner, Form, XStack, Checkbox, Text, Button, View, Separator, Stack } from "tamagui";
 import { FlashList } from "@shopify/flash-list";
 
 import { api } from "~generated/api";
 import { Doc } from "~generated/dataModel";
 import { useTaskUpdateOptimistic, useTaskRemoveOptimistic } from "~/hooks/use-task-optimistic";
 import { useEditTaskSheet } from "./edit-task-sheet";
+import { IconButton } from "./ui/icon-button";
 
 export const TaskList = () => {
   const tasks = useQuery(api.tasks.list);
@@ -28,11 +29,14 @@ export const TaskList = () => {
   }
 
   return (
-    <FlashList
-      data={tasks}
-      ItemSeparatorComponent={() => <Separator marginVertical="$3" />}
-      renderItem={({ item }) => <TaskItem task={item} />}
-    />
+    <View flex={1}>
+      <FlashList
+        data={tasks}
+        estimatedItemSize={54}
+        ItemSeparatorComponent={() => <Separator />}
+        renderItem={({ item }) => <TaskItem task={item} />}
+      />
+    </View>
   );
 };
 
@@ -43,12 +47,12 @@ const TaskItem = ({ task }: { task: Doc<"tasks"> }) => {
   const { setActiveTask } = useEditTaskSheet("TaskItem");
 
   return (
-    <Form onSubmit={() => {}}>
+    <Form onSubmit={() => {}} py="$3">
       <XStack alignItems="center" gap="$2">
         <Checkbox
           checked={task.completed}
           onCheckedChange={(checked) => {
-            update({ _id: task._id, completed: checked as boolean });
+            update({ id: task._id, completed: checked as boolean });
           }}
           mr="$2"
         >
@@ -59,15 +63,18 @@ const TaskItem = ({ task }: { task: Doc<"tasks"> }) => {
 
         <Text>{task.title}</Text>
 
-        <Button ml="auto" size="$2" icon={Pencil} onPress={() => setActiveTask(task)} />
+        <IconButton ml="auto" size="$2" onPress={() => setActiveTask(task)}>
+          <Pencil />
+        </IconButton>
 
-        <Button
+        <IconButton
           size="$2"
-          icon={Trash}
           onPress={() => {
-            remove({ _id: task._id });
+            remove({ id: task._id });
           }}
-        />
+        >
+          <Trash />
+        </IconButton>
       </XStack>
     </Form>
   );

@@ -38,7 +38,7 @@ export const EditTaskSheet = () => {
   }, [activeTask]);
 
   const onSubmit = form.handleSubmit((data) => {
-    update({ _id: activeTask!._id, ...data });
+    update({ id: activeTask!._id, ...data });
     setActiveTask(null);
   });
 

@@ -4,7 +4,9 @@ type ConvexFunctionArgs<Validator extends PropertyValidators | unknown> = unknow
   ? Record<string, unknown>
   : ObjectType<Extract<Validator, PropertyValidators>>;
 
+type MaybePromise<T> = T | Promise<T>;
+
 export type ConvexFunction<Ctx, Output, Validator extends PropertyValidators | unknown> = {
   args?: Validator;
-  handler: (ctx: Ctx, args: ConvexFunctionArgs<Validator>) => Promise<Output>;
+  handler: (ctx: Ctx, args: ConvexFunctionArgs<Validator>) => MaybePromise<Output>;
 };
